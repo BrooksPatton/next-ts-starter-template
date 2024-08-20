@@ -20,6 +20,6 @@ export const updatePost = async (id: number, data: Post) => {
 };
 
 export const getPostList = async () => {
-    const res = response;
-    return res.data;
+  const res = response;
+  return res.data;
 };

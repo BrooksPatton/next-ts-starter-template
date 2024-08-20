@@ -4,12 +4,18 @@ import { Post } from '../../interfaces/post';
 import { createPost } from '../api/api';
 
 const NewPostForm = (post: Post) => {
-    const [title] = React.useState(post.title);
-    const [content] = React.useState(post.content);
+  const [title] = React.useState(post.title);
+  const [content] = React.useState(post.content);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-      await createPost({ title, content, author: 'default', id: 12, datePublished: new Date() });
+    await createPost({
+      title,
+      content,
+      author: 'default',
+      id: 12,
+      datePublished: new Date(),
+    });
   };
 
   return (

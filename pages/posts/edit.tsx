@@ -9,7 +9,13 @@ const EditPostForm = (post: Post) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    await updatePost(post.id, { title, content, author: 'default', id: post.id, datePublished: new Date() });
+    await updatePost(post.id, {
+      title,
+      content,
+      author: 'default',
+      id: post.id,
+      datePublished: new Date(),
+    });
   };
 
   return (
@@ -20,10 +26,21 @@ const EditPostForm = (post: Post) => {
       <h1>Edit Post</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
-        <input type="text" id="title" name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
         <br />
         <label htmlFor="content">Content:</label>
-        <textarea id="content" name="content" value={content} onChange={(event) => setContent(event.target.value)} />
+        <textarea
+          id="content"
+          name="content"
+          value={content}
+          onChange={(event) => setContent(event.target.value)}
+        />
         <br />
         <button type="submit">Update Post</button>
       </form>
@@ -31,7 +48,7 @@ const EditPostForm = (post: Post) => {
   );
 };
 
-export const getStaticProps = async (params: { slug: number;}) => {
+export const getStaticProps = async (params: { slug: number }) => {
   const post = await getPostBySlug(params.slug);
   return { props: { post } };
 };

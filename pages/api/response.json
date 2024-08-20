@@ -1,26 +1,25 @@
 {
-    "data": 
-    [
-        {
-            "id": 1,
-            "title": "My First Blog Post",
-            "author": "John Doe",
-            "content": "This is the content of my first blog post.",
-            "datePublished": "2024-08-16"
-        },
-        {
-            "id": 2,
-            "title": "My Second Blog Post",
-            "author": "John Doe",
-            "content": "This is the content of my first blog post.",
-            "datePublished": "2024-08-19"
-        },
-        {
-            "id": 3,
-            "title": "My third Blog Post",
-            "author": "John Doe",
-            "content": "This is the content of my first blog post.",
-            "datePublished": "2024-08-19"
-        }
-    ]
+  "data": [
+    {
+      "id": 1,
+      "title": "My First Blog Post",
+      "author": "John Doe",
+      "content": "This is the content of my first blog post.",
+      "datePublished": "2024-08-16"
+    },
+    {
+      "id": 2,
+      "title": "My Second Blog Post",
+      "author": "John Doe",
+      "content": "This is the content of my first blog post.",
+      "datePublished": "2024-08-19"
+    },
+    {
+      "id": 3,
+      "title": "My third Blog Post",
+      "author": "John Doe",
+      "content": "This is the content of my first blog post.",
+      "datePublished": "2024-08-19"
+    }
+  ]
 }

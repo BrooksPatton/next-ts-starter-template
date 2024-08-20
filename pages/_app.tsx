@@ -3,7 +3,6 @@ import Head from 'next/head';
 import React from 'react';
 
 class MyApp extends App {
-
   render() {
     const { Component, pageProps } = this.props;
 
