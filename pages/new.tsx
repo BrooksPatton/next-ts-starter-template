@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
-import { Post } from '../../interfaces/post';
-import { createPost } from '../api/api';
+import { createPost } from './api/api';
+import { Post } from '../interfaces/post';
 
 const NewPostForm = (post: Post) => {
   const [title] = React.useState(post.title);

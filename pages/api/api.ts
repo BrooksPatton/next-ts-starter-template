@@ -1,7 +1,7 @@
 import * as response from './response.json';
 import { Post } from '../../interfaces/post';
 
-export const getPostBySlug = async (slug: number) => {
+export const getPostBySlug = async (slug: string) => {
 
   return {
     id: slug,

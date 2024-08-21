@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
-import { Post } from '../../interfaces/post';
-import { getPostBySlug, updatePost } from '../api/api';
+import { getPostBySlug, updatePost } from './api/api';
+import { Post } from '../interfaces/post';
 
 const EditPostForm = (post: Post) => {
   const [title, setTitle] = React.useState(post.title);
@@ -48,7 +48,7 @@ const EditPostForm = (post: Post) => {
   );
 };
 
-export const getStaticProps = async (params: { slug: number }) => {
+export const getStaticProps = async (params: { slug: string }) => {
   const post = await getPostBySlug(params.slug);
   return { props: { post: { title: post.title, content: post.content } } };
 };

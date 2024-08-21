@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { Component } from 'react';
 import { Post } from '../interfaces/post';
 
@@ -11,7 +12,9 @@ class PostList extends Component<{ posts: Array<Post> }> {
       <ul>
         {posts.map((post: Post) => (
           <li key={post.id}>
-            <p> {post.title} </p>
+            <Link href={`/posts/${encodeURIComponent(post.id)}`}>
+              {post.title}
+            </Link>
           </li>
         ))}
       </ul>

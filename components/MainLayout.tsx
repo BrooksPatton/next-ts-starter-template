@@ -17,7 +17,7 @@ export default function MainLayout(props: LayoutProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, minimum-scale=1"
         />
-        <title>Your Next Project!</title>
+        <title>My Blog Site</title>
         <link rel="icon" href="/logo.png" />
       </Head>
       <Navbar />

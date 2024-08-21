@@ -15,9 +15,15 @@ const PostTemplate = (post: Post) => {
   );
 };
 
-export const getStaticProps = async (params: { slug: number }) => {
+export const getStaticProps = async (params: { slug: string }) => {
   const post = await getPostBySlug(params.slug);
   return { props: { post: { title: post.title, content: post.content } } };
 };
+
+export const getStaticPaths = () => {
+  const slugs = ['1','2','3'];
+  return { paths: slugs, fallback: true};
+};
+
 
 export default PostTemplate;
