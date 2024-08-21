@@ -11,6 +11,7 @@ const EditPostForm = (post: Post) => {
     event.preventDefault();
     await updatePost(post.id, {
       title,
+      slug: title.replace(' ', '-'),
       content,
       author: 'default',
       id: post.id,

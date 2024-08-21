@@ -21,8 +21,17 @@ export const getStaticProps = async (params: { slug: string }) => {
 };
 
 export const getStaticPaths = () => {
-  const slugs = ['1', '2', '3'];
-  return { paths: slugs, fallback: true };
+  // Fetch the list of slugs from your data source
+  const slugs = ['/Post-One', '/Post-Two', '/Post-Three'];
+
+  // Return an array of paths for each slug
+  const paths = [
+    { params: { slug: slugs[0] } },
+    { params: { slug: slugs[1] } },
+    { params: { slug: slugs[2] } }
+  ];
+
+  return { paths: paths, fallback: false };
 };
 
 export default PostTemplate;

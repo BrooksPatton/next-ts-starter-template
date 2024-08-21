@@ -7,21 +7,24 @@ const HomePage = () => {
   const posts = [
     {
       id: 1,
-      title: 'Post 1',
+      slug: 'Post-One',
+      title: 'Post One',
       content: 'content',
       author: 'default',
       datePublished: new Date(),
     },
     {
       id: 2,
-      title: 'Post 2',
+      slug: 'Post-Two',
+      title: 'Post Two',
       content: 'content',
       author: 'default',
       datePublished: new Date(),
     },
     {
       id: 3,
-      title: 'Post 3',
+      slug: 'Post-Three',
+      title: 'Post Three',
       content: 'content',
       author: 'default',
       datePublished: new Date(),

@@ -12,7 +12,7 @@ class PostList extends Component<{ posts: Array<Post> }> {
       <ul>
         {posts.map((post: Post) => (
           <li key={post.id}>
-            <Link href={`/posts/${encodeURIComponent(post.id)}`}>
+            <Link href={`/posts/${encodeURIComponent(post.slug)}`}>
               {post.title}
             </Link>
           </li>

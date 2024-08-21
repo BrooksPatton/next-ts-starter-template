@@ -3,8 +3,9 @@ import { Post } from '../../interfaces/post';
 
 export const getPostBySlug = async (slug: string) => {
   return {
-    id: slug,
-    title: 'My {slug} Blog Post',
+    id: 5,
+    slug: slug,
+    title: 'My ${slug} Blog Post',
     author: 'John Doe',
     content: 'This is the content of my first blog post.',
     datePublished: new Date(),

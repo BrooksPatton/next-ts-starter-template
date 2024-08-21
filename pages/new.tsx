@@ -11,6 +11,7 @@ const NewPostForm = (post: Post) => {
     event.preventDefault();
     await createPost({
       title,
+      slug: title.replace(' ', '-'),
       content,
       author: 'default',
       id: 12,
