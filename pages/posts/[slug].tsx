@@ -21,9 +21,8 @@ export const getStaticProps = async (params: { slug: string }) => {
 };
 
 export const getStaticPaths = () => {
-  const slugs = ['1','2','3'];
-  return { paths: slugs, fallback: true};
+  const slugs = ['1', '2', '3'];
+  return { paths: slugs, fallback: true };
 };
-
 
 export default PostTemplate;
