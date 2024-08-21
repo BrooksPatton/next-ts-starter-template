@@ -15,20 +15,20 @@ const PostTemplate = (post: Post) => {
   );
 };
 
-export const getStaticProps = async (params: { slug: string }) => {
-  const post = await getPostBySlug(params.slug);
-  return { props: { post: { title: post.title, content: post.content } } };
+export const getStaticProps = async (params: { params: { slug: string }}) => {
+  const post = await getPostBySlug(params.params.slug);
+  return { props: { title: post.title, content: post.content } };
 };
 
 export const getStaticPaths = () => {
   // Fetch the list of slugs from your data source
-  const slugs = ['/Post-One', '/Post-Two', '/Post-Three'];
+  const slugs = ['Post-One', 'Post-Two', 'Post-Three'];
 
   // Return an array of paths for each slug
   const paths = [
     { params: { slug: slugs[0] } },
     { params: { slug: slugs[1] } },
-    { params: { slug: slugs[2] } }
+    { params: { slug: slugs[2] } },
   ];
 
   return { paths: paths, fallback: false };
