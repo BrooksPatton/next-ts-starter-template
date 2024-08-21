@@ -15,7 +15,7 @@ const PostTemplate = (post: Post) => {
   );
 };
 
-export const getStaticProps = async (params: { params: { slug: string }}) => {
+export const getStaticProps = async (params: { params: { slug: string } }) => {
   const post = await getPostBySlug(params.params.slug);
   return { props: { title: post.title, content: post.content } };
 };
