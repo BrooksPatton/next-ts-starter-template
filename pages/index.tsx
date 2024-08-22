@@ -1,7 +1,7 @@
 import React from 'react';
+import { formatDate } from './api/api';
 import MainLayout from '../components/MainLayout';
 import PostList from '../components/PostList';
-import { formatDate } from './api/api';
 import styles from '../styles/Home.module.scss';
 
 const HomePage = () => {

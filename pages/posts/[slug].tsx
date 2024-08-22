@@ -1,24 +1,22 @@
 import Link from 'next/link';
 import React from 'react';
-import { Post } from '../../interfaces/post';
-import { getPostBySlug } from '../api/api';
 import MainLayout from '../../components/MainLayout';
+import { Post } from '../../interfaces/post';
 import styles from '../../styles/Home.module.scss';
-
+import { getPostBySlug } from '../api/api';
 
 const PostTemplate = (post: Post) => {
   return (
     <MainLayout>
       <div className={styles.main}>
         <h1 className={styles.description}></h1>
-      <h1>{post.title}</h1>
-      <i>{post.author}  {post.datePublished}</i>
-      <p>{post.content}</p>
-      <Link href={`/edit/${post.slug.replace(' ', '-')}`}>
-         Edit
-      </Link>
-    </div>
-       
+        <h1>{post.title}</h1>
+        <i>
+          {post.author} {post.datePublished}
+        </i>
+        <p>{post.content}</p>
+        <Link href={`/edit/${post.slug.replace(' ', '-')}`}>Edit</Link>
+      </div>
     </MainLayout>
   );
 };

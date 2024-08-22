@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import { createPost } from './api/api';
+import { createPost, formatDate } from './api/api';
 import { Post } from '../interfaces/post';
 
 const NewPostForm = (post: Post) => {
@@ -15,7 +15,7 @@ const NewPostForm = (post: Post) => {
       content,
       author: 'default',
       id: 12,
-      datePublished: new Date(),
+      datePublished: formatDate(new Date()),
     });
   };
 

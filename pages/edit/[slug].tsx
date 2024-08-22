@@ -1,8 +1,8 @@
 import React from 'react';
-import { getPostBySlug, updatePost, formatDate } from '../api/api';
 import MainLayout from '../../components/MainLayout';
-import styles from '../../styles/Home.module.scss';
 import { Post } from '../../interfaces/post';
+import styles from '../../styles/Home.module.scss';
+import { getPostBySlug, updatePost, formatDate } from '../api/api';
 
 const EditPostForm = (post: Post) => {
   const [title, setTitle] = React.useState(post.title);
@@ -68,6 +68,5 @@ export const getStaticPaths = () => {
 
   return { paths: paths, fallback: false };
 };
-
 
 export default EditPostForm;
