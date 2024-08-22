@@ -23,7 +23,7 @@ const NewPostForm = (post: Post) => {
   return (
     <MainLayout>
       <div className={styles.main}>
-      <h1 className={styles.description}>New Post</h1>
+        <h1 className={styles.description}>New Post</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="title">Title:</label>
           <input type="text" id="title" name="title" />
