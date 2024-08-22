@@ -1,7 +1,8 @@
-import Head from 'next/head';
 import React from 'react';
 import { createPost, formatDate } from './api/api';
+import MainLayout from '../components/MainLayout';
 import { Post } from '../interfaces/post';
+import styles from '../styles/Home.module.scss';
 
 const NewPostForm = (post: Post) => {
   const [title] = React.useState(post.title);
@@ -20,21 +21,20 @@ const NewPostForm = (post: Post) => {
   };
 
   return (
-    <div>
-      <Head>
-        <title>New Post | My Blog</title>
-      </Head>
-      <h1>New Post</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title:</label>
-        <input type="text" id="title" name="title" />
-        <br />
-        <label htmlFor="content">Content:</label>
-        <textarea id="content" name="content" />
-        <br />
-        <button type="submit">Create Post</button>
-      </form>
-    </div>
+    <MainLayout>
+      <div className={styles.main}>
+      <h1 className={styles.description}>New Post</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="title">Title:</label>
+          <input type="text" id="title" name="title" />
+          <br />
+          <label htmlFor="content">Content:</label>
+          <textarea id="content" name="content" />
+          <br />
+          <button type="submit">Create Post</button>
+        </form>
+      </div>
+    </MainLayout>
   );
 };
 

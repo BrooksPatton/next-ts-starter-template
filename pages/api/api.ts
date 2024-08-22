@@ -7,7 +7,7 @@ export const getPostBySlug = async (slug: string) => {
     slug: slug,
     title: `${slug.replace('-', ' ')} Blog Post`,
     author: 'John Doe',
-    content: 'This is the content of my first blog post.',
+    content: `This is the content of my ${slug.replace('-', ' ')} blog post.`,
     datePublished: formatDate(new Date()),
   };
 };
