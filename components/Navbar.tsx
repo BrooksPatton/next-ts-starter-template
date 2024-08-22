@@ -19,11 +19,11 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="navbar-items">
-        <div className="navbar-link">
-          <Link href="/otherPage">Other Page</Link>
+      <div className="navbar-link">
+          <Link href="/">Home</Link>
         </div>
         <div className="navbar-link">
-          <Link href="/testPage">Test Page</Link>
+          <Link href="/new">New Post</Link>
         </div>
       </div>
     </nav>

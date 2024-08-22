@@ -1,6 +1,7 @@
 import React from 'react';
 import MainLayout from '../components/MainLayout';
 import PostList from '../components/PostList';
+import { formatDate } from './api/api';
 import styles from '../styles/Home.module.scss';
 
 const HomePage = () => {
@@ -11,7 +12,7 @@ const HomePage = () => {
       title: 'Post One',
       content: 'content',
       author: 'default',
-      datePublished: new Date(),
+      datePublished: formatDate(new Date()),
     },
     {
       id: 2,
@@ -19,7 +20,7 @@ const HomePage = () => {
       title: 'Post Two',
       content: 'content',
       author: 'default',
-      datePublished: new Date(),
+      datePublished: formatDate(new Date()),
     },
     {
       id: 3,
@@ -27,7 +28,7 @@ const HomePage = () => {
       title: 'Post Three',
       content: 'content',
       author: 'default',
-      datePublished: new Date(),
+      datePublished: formatDate(new Date()),
     },
   ];
 
