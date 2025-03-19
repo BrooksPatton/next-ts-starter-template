@@ -3,18 +3,16 @@ import React from 'react';
 import MainLayout from '../components/MainLayout';
 import styles from '../styles/Home.module.scss';
 
-export default function Test() {
+const TestPage = () => {
   return (
     <MainLayout>
       <div className={styles.main}>
-        <h1 className={styles.description}>
-          Here&apos;s yet another test page you can navigate to using the
-          navbar!
-        </h1>
-        <Link href="/">
-          <button>Go back home</button>
-        </Link>
+        <h1>Test Page</h1>
+        <p>This is a test page to verify routing and layout functionality.</p>
+        <Link href="/">Back to Home</Link>
       </div>
     </MainLayout>
   );
-}
+};
+
+export default TestPage;

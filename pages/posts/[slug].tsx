@@ -1,43 +1,78 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import MainLayout from '../../components/MainLayout';
 import { Post } from '../../interfaces/post';
-import styles from '../../styles/Home.module.scss';
-import { getPostBySlug } from '../api/api';
+import styles from '../../styles/Post.module.scss';
+import { getPostBySlug, getPostList } from '../api/api';
 
-const PostTemplate = (post: Post) => {
+interface PostTemplateProps {
+  post: Post;
+}
+
+const PostTemplate = ({ post }: PostTemplateProps) => {
   return (
-    <MainLayout>
-      <div className={styles.main}>
-        <h1 className={styles.description}></h1>
+    <div className={styles.postContainer}>
+      <Link href="/" className={styles.backLink}>
+        ← Back to Home
+      </Link>
+      <article className={styles.post}>
+        {post.coverImage && (
+          <div className={styles.postHeader}>
+            <Image
+              src={post.coverImage.url}
+              alt={post.coverImage.alt || post.title}
+              width={1200}
+              height={600}
+              className={styles.coverImage}
+              priority
+            />
+          </div>
+        )}
         <h1>{post.title}</h1>
-        <i>
-          {post.author} {post.datePublished}
-        </i>
-        <p>{post.content}</p>
-        <Link href={`/edit/${post.slug.replace(' ', '-')}`}>Edit</Link>
-      </div>
-    </MainLayout>
+        <div className={styles.postMeta}>
+          <span className={styles.postDate}>
+            {new Date(post.datePublished).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </span>
+          <span className={styles.postAuthor}>by {post.author}</span>
+        </div>
+        <div className={styles.postContent}>
+          {post.content.split('\n').map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+        </div>
+      </article>
+    </div>
   );
 };
 
-export const getStaticProps = async (params: { params: { slug: string } }) => {
-  const post = await getPostBySlug(params.params.slug);
-  return { props: post };
-};
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const post = await getPostBySlug(params.slug);
+  if (!post) {
+    return {
+      notFound: true
+    };
+  }
+  return {
+    props: {
+      post
+    }
+  };
+}
 
-export const getStaticPaths = () => {
-  // Fetch the list of slugs from your data source
-  const slugs = ['Post-One', 'Post-Two', 'Post-Three'];
+export async function getStaticPaths() {
+  const posts = await getPostList();
+  const paths = posts.map(post => ({
+    params: { slug: post.slug }
+  }));
 
-  // Return an array of paths for each slug
-  const paths = [
-    { params: { slug: slugs[0] } },
-    { params: { slug: slugs[1] } },
-    { params: { slug: slugs[2] } },
-  ];
-
-  return { paths: paths, fallback: false };
-};
+  return {
+    paths,
+    fallback: 'blocking'
+  };
+}
 
 export default PostTemplate;

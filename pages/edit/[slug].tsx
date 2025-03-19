@@ -1,5 +1,4 @@
 import React from 'react';
-import MainLayout from '../../components/MainLayout';
 import { Post } from '../../interfaces/post';
 import styles from '../../styles/Home.module.scss';
 import { getPostBySlug, updatePost, formatDate } from '../api/api';
@@ -21,32 +20,30 @@ const EditPostForm = (post: Post) => {
   };
 
   return (
-    <MainLayout>
-      <div className={styles.main}>
-        <h1 className={styles.description}></h1>
+    <div className={styles.main}>
+      <h1 className={styles.description}>Edit Post</h1>
 
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="title">Title:</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-          <br />
-          <label htmlFor="content">Content:</label>
-          <textarea
-            id="content"
-            name="content"
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
-          />
-          <br />
-          <button type="submit">Update Post</button>
-        </form>
-      </div>
-    </MainLayout>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="title">Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+        <br />
+        <label htmlFor="content">Content:</label>
+        <textarea
+          id="content"
+          name="content"
+          value={content}
+          onChange={(event) => setContent(event.target.value)}
+        />
+        <br />
+        <button type="submit">Update Post</button>
+      </form>
+    </div>
   );
 };
 

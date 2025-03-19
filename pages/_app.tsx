@@ -1,18 +1,12 @@
-import App from 'next/app';
-import Head from 'next/head';
-import React from 'react';
+import type { AppProps } from 'next/app';
+import MainLayout from '../components/MainLayout';
+import '../styles/globals.scss';
 
-class MyApp extends App {
-  render() {
-    const { Component, pageProps } = this.props;
-
-    return (
-      <Head>
-        <title>My Blog</title>
-        <Component {...pageProps} />
-      </Head>
-    );
-  }
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <MainLayout>
+      <Component {...pageProps} />
+    </MainLayout>
+  );
 }
 
-export default MyApp;

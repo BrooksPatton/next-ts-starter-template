@@ -1,46 +1,31 @@
 import React from 'react';
-import { formatDate } from './api/api';
-import MainLayout from '../components/MainLayout';
+import { getPostList } from './api/api';
 import PostList from '../components/PostList';
+import { Post } from '../interfaces/post';
 import styles from '../styles/Home.module.scss';
 
-const HomePage = () => {
-  const posts = [
-    {
-      id: 1,
-      slug: 'Post-One',
-      title: 'Post One',
-      content: 'content',
-      author: 'default',
-      datePublished: formatDate(new Date()),
-    },
-    {
-      id: 2,
-      slug: 'Post-Two',
-      title: 'Post Two',
-      content: 'content',
-      author: 'default',
-      datePublished: formatDate(new Date()),
-    },
-    {
-      id: 3,
-      slug: 'Post-Three',
-      title: 'Post Three',
-      content: 'content',
-      author: 'default',
-      datePublished: formatDate(new Date()),
-    },
-  ];
+interface HomePageProps {
+  posts: Post[];
+}
 
+const HomePage = ({ posts }: HomePageProps) => {
   return (
-    <MainLayout>
-      <div className={styles.main}>
-        <h1>Welcome to My Blog</h1>
-        <p>These are the most recent blog posts</p>
-        <PostList posts={posts} />
-      </div>
-    </MainLayout>
+    <div className={styles.main}>
+      <h1>Welcome to My Blog</h1>
+      <p>These are the most recent blog posts</p>
+      <PostList posts={posts} />
+    </div>
   );
 };
 
+export async function getStaticProps() {
+  const posts = await getPostList();
+  return {
+    props: {
+      posts
+    }
+  };
+}
+
 export default HomePage;
+

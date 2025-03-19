@@ -2,24 +2,24 @@
   "data": [
     {
       "id": 1,
-      "title": "My First Blog Post",
-      "author": "John Doe",
-      "content": "This is the content of my first blog post.",
-      "datePublished": "2024-08-16"
+      "title": "Getting Started with React: A Modern UI Library",
+      "author": "Sarah Chen",
+      "content": "React has revolutionized the way we build user interfaces. As a JavaScript library developed and maintained by Facebook, React introduces a component-based architecture that makes UI development more intuitive and maintainable. The key concept that sets React apart is its Virtual DOM, which optimizes rendering performance by minimizing actual DOM manipulations. With features like JSX, hooks, and a robust ecosystem of third-party libraries, React has become the go-to choice for building modern web applications. Whether you're building a simple landing page or a complex enterprise application, React's declarative approach to UI development helps you write more predictable and easier to debug code.",
+      "datePublished": "2024-03-15"
     },
     {
       "id": 2,
-      "title": "My Second Blog Post",
-      "author": "John Doe",
-      "content": "This is the content of my first blog post.",
-      "datePublished": "2024-08-19"
+      "title": "TypeScript: Adding Type Safety to JavaScript",
+      "author": "Michael Rodriguez",
+      "content": "TypeScript has emerged as a game-changer in the JavaScript ecosystem. As a strongly typed superset of JavaScript, TypeScript brings static typing to JavaScript development, helping catch errors early in the development process. One of its greatest strengths is the ability to define interfaces and types, making code more self-documenting and maintainable. The TypeScript compiler acts as a helpful assistant, providing excellent IntelliSense support in modern IDEs and catching potential runtime errors during development. With features like generics, union types, and type inference, TypeScript helps teams build more robust and scalable applications while maintaining JavaScript's flexibility.",
+      "datePublished": "2024-03-16"
     },
     {
       "id": 3,
-      "title": "My third Blog Post",
-      "author": "John Doe",
-      "content": "This is the content of my first blog post.",
-      "datePublished": "2024-08-19"
+      "title": "Next.js: The React Framework for Production",
+      "author": "Emma Thompson",
+      "content": "Next.js has transformed React development by providing a powerful framework for building production-ready applications. Its key features include automatic code splitting, server-side rendering (SSR), static site generation (SSG), and an intuitive file-based routing system. The framework's zero-config approach means developers can focus on building features rather than setting up complex configurations. Next.js 13 introduced revolutionary features like the App Router and React Server Components, enabling even better performance and developer experience. Whether you're building a blog, e-commerce site, or enterprise application, Next.js provides the tools and optimizations needed for a fast, SEO-friendly, and scalable web application.",
+      "datePublished": "2024-03-17"
     }
   ]
 }

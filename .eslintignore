@@ -1,5 +1,4 @@
 webpack.*
-yarn.lock
 *.json
 *.md
 *.toml

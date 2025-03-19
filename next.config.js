@@ -5,6 +5,10 @@ const nextConfig = {
   eslint: {
     dirs: ['components', 'pages'],
   },
+  images: {
+    domains: ['localhost'],
+    unoptimized: true,
+  },
 };
 
 module.exports = nextConfig;
