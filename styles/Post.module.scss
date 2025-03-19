@@ -6,12 +6,18 @@
   padding: 2rem 1rem;
 }
 
-.backLink {
+.postHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.backLink, .editLink {
   display: inline-flex;
   align-items: center;
   color: $acm-blue;
   text-decoration: none;
-  margin-bottom: 2rem;
   font-size: 1.1rem;
   transition: color 0.2s ease;
 
@@ -27,7 +33,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.postHeader {
+.coverImageContainer {
   margin: -2.5rem -2.5rem 2rem;
   position: relative;
   width: calc(100% + 5rem);

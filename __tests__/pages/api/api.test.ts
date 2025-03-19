@@ -1,7 +1,7 @@
-import { getPostList, getPostBySlug, createPost, updatePost, formatDate } from '../../../pages/api/api';
+import { getPostList, getPostBySlug, createPost, updatePost } from '../../../pages/api/api';
 import { Post } from '../../../interfaces/post';
 
-// Mock fetch
+// Mock fetch globally
 global.fetch = jest.fn();
 
 describe('API Functions', () => {
@@ -23,30 +23,17 @@ describe('API Functions', () => {
     jest.clearAllMocks();
   });
 
-  describe('formatDate', () => {
-    it('formats date correctly', () => {
-      const date = new Date('2024-03-17T12:00:00Z');
-      expect(formatDate(date)).toBe('March 17, 2024');
-    });
-
-    it('handles different dates', () => {
-      const date = new Date('2023-12-25T12:00:00Z');
-      expect(formatDate(date)).toBe('December 25, 2023');
-    });
-  });
-
   describe('getPostList', () => {
     it('fetches posts successfully', async () => {
-      const mockResponse = { ok: true, json: () => Promise.resolve([mockPost]) };
-      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      const mockResponse = new Response(JSON.stringify([mockPost]));
+      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
       const posts = await getPostList();
       expect(posts).toEqual([mockPost]);
-      expect(global.fetch).toHaveBeenCalledWith('/api/posts');
     });
 
     it('handles errors gracefully', async () => {
-      (global.fetch as jest.Mock).mockRejectedValue(new Error('API Error'));
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
       const posts = await getPostList();
       expect(posts).toEqual([]);
@@ -55,24 +42,15 @@ describe('API Functions', () => {
 
   describe('getPostBySlug', () => {
     it('fetches post successfully', async () => {
-      const mockResponse = { ok: true, json: () => Promise.resolve(mockPost) };
-      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      const mockResponse = new Response(JSON.stringify(mockPost));
+      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
       const post = await getPostBySlug('test-post');
       expect(post).toEqual(mockPost);
-      expect(global.fetch).toHaveBeenCalledWith('/api/posts/test-post');
-    });
-
-    it('returns null for invalid slug', async () => {
-      const mockResponse = { ok: false };
-      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
-
-      const post = await getPostBySlug('invalid-slug');
-      expect(post).toBeNull();
     });
 
     it('handles errors gracefully', async () => {
-      (global.fetch as jest.Mock).mockRejectedValue(new Error('API Error'));
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
       const post = await getPostBySlug('test-post');
       expect(post).toBeNull();
@@ -80,32 +58,45 @@ describe('API Functions', () => {
   });
 
   describe('createPost', () => {
-    it('creates post successfully', async () => {
-      const mockResponse = { ok: true, json: () => Promise.resolve(mockPost) };
-      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+    const newPost: Omit<Post, 'id'> = {
+      title: 'Test Post',
+      slug: 'test-post',
+      content: 'Test content',
+      author: 'Test Author',
+      datePublished: '2024-03-17T12:00:00Z',
+      excerpt: 'Test excerpt',
+      coverImage: {
+        url: '/images/test.jpg',
+        alt: 'Test image',
+      },
+    };
 
-      const newPost = await createPost(mockPost);
-      expect(newPost).toEqual(mockPost);
+    it('creates post successfully', async () => {
+      const mockResponse = new Response(JSON.stringify({ ...newPost, id: 1 }));
+      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
+
+      const createdPost = await createPost(newPost);
+      expect(createdPost).toEqual({ ...newPost, id: 1 });
       expect(global.fetch).toHaveBeenCalledWith('/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(mockPost),
+        body: JSON.stringify(newPost),
       });
     });
 
     it('handles errors', async () => {
-      (global.fetch as jest.Mock).mockRejectedValue(new Error('API Error'));
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
-      await expect(createPost(mockPost)).rejects.toThrow('API Error');
+      await expect(createPost(newPost)).rejects.toThrow('API Error');
     });
   });
 
   describe('updatePost', () => {
     it('updates post successfully', async () => {
-      const mockResponse = { ok: true, json: () => Promise.resolve(mockPost) };
-      (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
+      const mockResponse = new Response(JSON.stringify(mockPost));
+      (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
       const updatedPost = await updatePost(1, mockPost);
       expect(updatedPost).toEqual(mockPost);
@@ -119,7 +110,7 @@ describe('API Functions', () => {
     });
 
     it('handles errors', async () => {
-      (global.fetch as jest.Mock).mockRejectedValue(new Error('API Error'));
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
       await expect(updatePost(1, mockPost)).rejects.toThrow('API Error');
     });

@@ -25,28 +25,15 @@
   text-decoration: none;
 }
 
-.logoImage {
-  height: auto;
-  width: auto;
-  max-width: 150px;
-}
+.logoText {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: $acm-dark-gray;
+  transition: color 0.2s ease;
 
-.menuButton {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  z-index: 1001;
-}
-
-.menuIcon {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background-color: $acm-dark-gray;
-  margin: 5px 0;
-  transition: all 0.3s ease;
+  &:hover {
+    color: $acm-blue;
+  }
 }
 
 .navLinks {
@@ -71,38 +58,14 @@
   }
 }
 
-@media (max-width: $tablet) {
-  .menuButton {
-    display: block;
-  }
-
-  .navLinks {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: white;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2rem;
-    padding: 2rem;
-
-    &.active {
-      display: flex;
-    }
-  }
-}
-
 @media (prefers-color-scheme: dark) {
   .navbar {
     background-color: #1a202c;
     border-bottom-color: #2d3748;
   }
 
-  .menuIcon {
-    background-color: #e2e8f0;
+  .logoText {
+    color: #e2e8f0;
   }
 
   .navLink {
@@ -115,9 +78,5 @@
     &.active {
       color: $acm-blue;
     }
-  }
-
-  .navLinks.active {
-    background-color: #1a202c;
   }
 } 

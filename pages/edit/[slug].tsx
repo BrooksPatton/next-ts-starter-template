@@ -1,69 +1,98 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Post } from '../../interfaces/post';
-import styles from '../../styles/Home.module.scss';
-import { getPostBySlug, updatePost, formatDate } from '../api/api';
+import styles from '../../styles/NewPost.module.scss';
+import { getPostBySlug, updatePost, formatDate, getPostList } from '../api/api';
 
-const EditPostForm = (post: Post) => {
+interface EditPostFormProps {
+  post: Post;
+}
+
+const EditPostForm = ({ post }: EditPostFormProps) => {
+  const router = useRouter();
   const [title, setTitle] = React.useState(post.title);
   const [content, setContent] = React.useState(post.content);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    await updatePost(post.id, {
-      title,
-      slug: title.replace(' ', '-'),
-      content,
-      author: 'default',
-      id: post.id,
-      datePublished: formatDate(new Date()),
-    });
+    if (!post.id) {
+      console.error('Post ID is missing');
+      return;
+    }
+    try {
+      await updatePost(post.id, {
+        title,
+        slug: title.toLowerCase().replace(/\s+/g, '-'),
+        content,
+        author: post.author,
+        id: post.id,
+        datePublished: post.datePublished,
+        excerpt: content.substring(0, 150) + '...',
+        coverImage: post.coverImage
+      });
+      router.push(`/posts/${title.toLowerCase().replace(/\s+/g, '-')}`);
+    } catch (error) {
+      console.error('Failed to update post:', error);
+    }
   };
 
   return (
-    <div className={styles.main}>
-      <h1 className={styles.description}>Edit Post</h1>
-
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <br />
-        <label htmlFor="content">Content:</label>
-        <textarea
-          id="content"
-          name="content"
-          value={content}
-          onChange={(event) => setContent(event.target.value)}
-        />
-        <br />
-        <button type="submit">Update Post</button>
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h1>Edit Post</h1>
+        <div className={styles.formGroup}>
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            required
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor="content">Content</label>
+          <textarea
+            id="content"
+            name="content"
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className={styles.submitButton}>
+          Update Post
+        </button>
       </form>
     </div>
   );
 };
 
-export const getStaticProps = async (params: { params: { slug: string } }) => {
-  const post = await getPostBySlug(params.params.slug);
-  return { props: post };
-};
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const post = await getPostBySlug(params.slug);
+  if (!post) {
+    return {
+      notFound: true
+    };
+  }
+  return {
+    props: {
+      post
+    }
+  };
+}
 
-export const getStaticPaths = () => {
-  // Fetch the list of slugs from your data source
-  const slugs = ['Post-One', 'Post-Two', 'Post-Three'];
+export async function getStaticPaths() {
+  const posts = await getPostList();
+  const paths = posts.map(post => ({
+    params: { slug: post.slug }
+  }));
 
-  // Return an array of paths for each slug
-  const paths = [
-    { params: { slug: slugs[0] } },
-    { params: { slug: slugs[1] } },
-    { params: { slug: slugs[2] } },
-  ];
-
-  return { paths: paths, fallback: false };
-};
+  return {
+    paths,
+    fallback: 'blocking'
+  };
+}
 
 export default EditPostForm;

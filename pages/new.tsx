@@ -26,7 +26,7 @@ export default function NewPost() {
       });
 
       if (post) {
-        router.push(`/blog/${post.slug}`);
+        router.push(`/posts/${post.slug}`);
       } else {
         setError('Failed to create post');
       }
@@ -39,10 +39,10 @@ export default function NewPost() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Create New Post</h1>
-      {error && <p className={styles.error}>{error}</p>}
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.field}>
+        <h1>Create New Post</h1>
+        {error && <p className={styles.error}>{error}</p>}
+        <div className={styles.formGroup}>
           <label htmlFor="title">Title</label>
           <input
             type="text"
@@ -52,7 +52,7 @@ export default function NewPost() {
             required
           />
         </div>
-        <div className={styles.field}>
+        <div className={styles.formGroup}>
           <label htmlFor="content">Content</label>
           <textarea
             id="content"
@@ -63,7 +63,7 @@ export default function NewPost() {
         </div>
         <button
           type="submit"
-          className={styles.submit}
+          className={styles.submitButton}
           disabled={isSubmitting}
         >
           {isSubmitting ? 'Creating...' : 'Create Post'}

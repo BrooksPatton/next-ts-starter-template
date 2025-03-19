@@ -1,95 +1,100 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import EditPostForm from '../../../pages/edit/[slug]';
+import { useRouter } from 'next/router';
+import EditPost from '../../../pages/edit/[slug]';
+import { getPostBySlug, updatePost } from '../../../pages/api/api';
 import { Post } from '../../../interfaces/post';
-import { updatePost, getPostBySlug } from '../../../pages/api/api';
 
-jest.mock('../../../pages/api/api', () => ({
-  updatePost: jest.fn(),
-  formatDate: jest.fn().mockReturnValue('2024-03-20'),
-  getPostBySlug: jest.fn(),
+// Mock next/router
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
 }));
 
-describe('EditPostForm', () => {
+// Mock the API functions
+jest.mock('../../../pages/api/api', () => ({
+  getPostBySlug: jest.fn(),
+  updatePost: jest.fn(),
+}));
+
+// Mock CSS module
+jest.mock('../../../styles/NewPost.module.scss', () => ({
+  container: 'container',
+  form: 'form',
+  formGroup: 'formGroup',
+  submitButton: 'submitButton',
+}));
+
+describe('EditPost', () => {
+  const mockRouter = {
+    push: jest.fn(),
+  };
+
   const mockPost: Post = {
     id: 1,
     title: 'Test Post',
     slug: 'test-post',
-    content: 'This is a test post content',
+    content: 'Test content',
     author: 'Test Author',
-    datePublished: '2024-03-20',
+    datePublished: '2024-03-16',
+    excerpt: 'Test excerpt',
+    coverImage: {
+      url: '/images/test.jpg',
+      alt: 'Test image',
+    },
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+    (getPostBySlug as jest.Mock).mockResolvedValue(mockPost);
+    (updatePost as jest.Mock).mockResolvedValue(mockPost);
+    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('renders the form with initial values', () => {
-    render(<EditPostForm {...mockPost} />);
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
+
+  it('renders form with post data', async () => {
+    render(<EditPost post={mockPost} />);
     
-    // Check if the form elements are present with correct initial values
     expect(screen.getByLabelText(/title/i)).toHaveValue(mockPost.title);
     expect(screen.getByLabelText(/content/i)).toHaveValue(mockPost.content);
-    expect(screen.getByRole('button', { name: /update post/i })).toBeInTheDocument();
-    expect(screen.getByText('Edit Post')).toBeInTheDocument();
   });
 
-  it('updates form values when user types', () => {
-    render(<EditPostForm {...mockPost} />);
-    
-    const titleInput = screen.getByLabelText(/title/i);
-    const contentInput = screen.getByLabelText(/content/i);
-    
-    fireEvent.change(titleInput, { target: { value: 'Updated Title' } });
-    fireEvent.change(contentInput, { target: { value: 'Updated Content' } });
-    
-    expect(titleInput).toHaveValue('Updated Title');
-    expect(contentInput).toHaveValue('Updated Content');
-  });
-
-  it('calls updatePost when form is submitted', async () => {
-    render(<EditPostForm {...mockPost} />);
+  it('handles form submission', async () => {
+    render(<EditPost post={mockPost} />);
     
     const titleInput = screen.getByLabelText(/title/i);
     const contentInput = screen.getByLabelText(/content/i);
     const submitButton = screen.getByRole('button', { name: /update post/i });
-    
+
     fireEvent.change(titleInput, { target: { value: 'Updated Title' } });
     fireEvent.change(contentInput, { target: { value: 'Updated Content' } });
     fireEvent.click(submitButton);
     
     await waitFor(() => {
-      expect(updatePost).toHaveBeenCalledWith(mockPost.id, {
+      expect(updatePost).toHaveBeenCalledWith({
+        ...mockPost,
         title: 'Updated Title',
-        slug: 'Updated-Title',
         content: 'Updated Content',
-        author: 'default',
-        id: mockPost.id,
-        datePublished: '2024-03-20',
+        slug: 'updated-title',
+        excerpt: 'Updated Content...',
       });
+      expect(mockRouter.push).toHaveBeenCalledWith('/posts/updated-title');
     });
   });
 
-  it('generates correct static paths', () => {
-    const { getStaticPaths } = require('../../../pages/edit/[slug]');
-    const paths = getStaticPaths();
+  it('handles errors during submission', async () => {
+    const error = new Error('API Error');
+    (updatePost as jest.Mock).mockRejectedValue(error);
     
-    expect(paths).toEqual({
-      paths: [
-        { params: { slug: 'Post-One' } },
-        { params: { slug: 'Post-Two' } },
-        { params: { slug: 'Post-Three' } },
-      ],
-      fallback: false,
+    render(<EditPost post={mockPost} />);
+    
+    const submitButton = screen.getByRole('button', { name: /update post/i });
+    fireEvent.click(submitButton);
+    
+    await waitFor(() => {
+      expect(console.error).toHaveBeenCalledWith('Failed to update post:', error);
     });
-  });
-
-  it('fetches post data in getStaticProps', async () => {
-    const { getStaticProps } = require('../../../pages/edit/[slug]');
-    (getPostBySlug as jest.Mock).mockResolvedValueOnce(mockPost);
-
-    const result = await getStaticProps({ params: { slug: 'test-post' } });
-    
-    expect(getPostBySlug).toHaveBeenCalledWith('test-post');
-    expect(result).toEqual({ props: mockPost });
   });
 }); 

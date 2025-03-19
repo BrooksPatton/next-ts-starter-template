@@ -62,8 +62,8 @@ describe('HomePage', () => {
   it('renders posts with correct links', () => {
     render(<HomePage posts={mockPosts} />);
     const links = screen.getAllByRole('link');
-    expect(links[0]).toHaveAttribute('href', '/blog/test-post-1');
-    expect(links[1]).toHaveAttribute('href', '/blog/test-post-2');
+    expect(links[0]).toHaveAttribute('href', '/posts/test-post-1');
+    expect(links[1]).toHaveAttribute('href', '/posts/test-post-2');
   });
 
   it('getStaticProps fetches posts correctly', async () => {

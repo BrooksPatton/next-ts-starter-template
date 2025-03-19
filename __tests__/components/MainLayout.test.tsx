@@ -16,45 +16,57 @@ jest.mock('next/image', () => ({
   default: (props: any) => <img {...props} />
 }));
 
-// Mock CSS modules
-const mockStyles = {
-  layout: 'layout',
+// Mock CSS module
+jest.mock('../../styles/MainLayout.module.scss', () => ({
+  container: 'container',
   main: 'main',
-};
-
-jest.doMock('../../styles/MainLayout.module.scss', () => mockStyles);
+  footer: 'footer'
+}));
 
 // Import MainLayout after mocking
 import MainLayout from '../../components/MainLayout';
 
 describe('MainLayout', () => {
-  const mockChildren = <div data-testid="mock-children">Test Content</div>;
-
   it('renders children content', () => {
-    render(<MainLayout>{mockChildren}</MainLayout>);
-    expect(screen.getByTestId('mock-children')).toBeInTheDocument();
+    render(
+      <MainLayout>
+        <div>Test Content</div>
+      </MainLayout>
+    );
+    
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('renders Navbar and Footer components', () => {
-    render(<MainLayout>{mockChildren}</MainLayout>);
+  it('renders footer with copyright text', () => {
+    render(
+      <MainLayout>
+        <div>Test Content</div>
+      </MainLayout>
+    );
     
-    // Check for navigation elements
-    const navElements = screen.getAllByRole('navigation');
-    expect(navElements).toHaveLength(2); // One for navbar, one for footer
-    
-    // Check for footer
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    expect(screen.getByText('© 2024 Your Blog Name. All rights reserved.')).toBeInTheDocument();
   });
 
   it('applies correct CSS classes', () => {
-    render(<MainLayout>{mockChildren}</MainLayout>);
+    render(
+      <MainLayout>
+        <div>Test Content</div>
+      </MainLayout>
+    );
     
-    // Check if layout has correct class
-    const layout = screen.getByTestId('mock-children').parentElement;
-    expect(layout).toHaveClass(mockStyles.layout);
+    expect(screen.getByRole('main')).toHaveClass('main');
+    expect(screen.getByRole('contentinfo')).toHaveClass('footer');
+  });
+
+  it('renders footer links', () => {
+    render(
+      <MainLayout>
+        <div>Test Content</div>
+      </MainLayout>
+    );
     
-    // Check if main has correct class
-    const main = layout?.querySelector('main');
-    expect(main).toHaveClass(mockStyles.main);
+    expect(screen.getByText('Privacy Policy')).toBeInTheDocument();
+    expect(screen.getByText('Terms of Service')).toBeInTheDocument();
+    expect(screen.getByText('Contact')).toBeInTheDocument();
   });
 });

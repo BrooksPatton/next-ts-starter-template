@@ -12,12 +12,17 @@ interface PostTemplateProps {
 const PostTemplate = ({ post }: PostTemplateProps) => {
   return (
     <div className={styles.postContainer}>
-      <Link href="/" className={styles.backLink}>
-        ← Back to Home
-      </Link>
+      <div className={styles.postHeader}>
+        <Link href="/" className={styles.backLink}>
+          ← Back to Home
+        </Link>
+        <Link href={`/edit/${post.slug}`} className={styles.editLink}>
+          Edit Post
+        </Link>
+      </div>
       <article className={styles.post}>
         {post.coverImage && (
-          <div className={styles.postHeader}>
+          <div className={styles.coverImageContainer}>
             <Image
               src={post.coverImage.url}
               alt={post.coverImage.alt || post.title}

@@ -1,93 +1,82 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import NewPost from '@/pages/new';
-import { createPost } from '@/pages/api/api';
+import { useRouter } from 'next/router';
+import NewPost from '../../pages/new';
+import { createPost } from '../../pages/api/api';
 
+// Mock next/router
 jest.mock('next/router', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-  }),
+  useRouter: jest.fn(),
 }));
 
-jest.mock('@/pages/api/api', () => ({
+// Mock the API function
+jest.mock('../../pages/api/api', () => ({
   createPost: jest.fn(),
 }));
 
-// Mock next/image
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} src={props.src} alt={props.alt} />;
-  },
+// Mock CSS module
+jest.mock('../../styles/NewPost.module.scss', () => ({
+  container: 'container',
+  form: 'form',
+  formGroup: 'formGroup',
+  submitButton: 'submitButton',
 }));
 
-// Mock next/head
-jest.mock('next/head', () => {
-  return {
-    __esModule: true,
-    default: ({ children }: { children: Array<React.ReactElement> }) => {
-      return <>{children}</>;
-    },
+describe('NewPost', () => {
+  const mockRouter = {
+    push: jest.fn(),
   };
-});
 
-describe('NewPostForm', () => {
   beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
     (createPost as jest.Mock).mockResolvedValue({
       id: 1,
       title: 'Test Title',
       slug: 'test-title',
       content: 'Test Content',
       author: 'default',
-      datePublished: new Date().toISOString(),
+      datePublished: '2025-03-18T17:09:56.680Z',
     });
   });
 
-  it('submits form with correct data', async () => {
+  it('renders form elements', () => {
     render(<NewPost />);
+    expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/content/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /create post/i })).toBeInTheDocument();
+  });
 
-    // Fill in the form
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByLabelText(/content/i), {
-      target: { value: 'Test Content' },
-    });
+  it('handles form submission', async () => {
+    render(<NewPost />);
+    
+    const titleInput = screen.getByLabelText(/title/i);
+    const contentInput = screen.getByLabelText(/content/i);
+    const submitButton = screen.getByRole('button', { name: /create post/i });
 
-    // Submit the form
-    fireEvent.click(screen.getByText(/create post/i));
-
-    // Check if createPost was called with correct data
+    fireEvent.change(titleInput, { target: { value: 'Test Title' } });
+    fireEvent.change(contentInput, { target: { value: 'Test Content' } });
+    fireEvent.click(submitButton);
+    
     await waitFor(() => {
       expect(createPost).toHaveBeenCalledWith({
         title: 'Test Title',
-        slug: 'test-title',
         content: 'Test Content',
         author: 'default',
         datePublished: expect.any(String),
+        slug: 'test-title',
       });
+      expect(mockRouter.push).toHaveBeenCalledWith('/posts/test-title');
     });
   });
 
-  it('shows error message when submission fails', async () => {
-    (createPost as jest.Mock).mockRejectedValue(new Error('Failed to create post'));
-
+  it('displays validation errors for empty fields', async () => {
     render(<NewPost />);
-
-    // Fill in the form
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Title' },
-    });
-    fireEvent.change(screen.getByLabelText(/content/i), {
-      target: { value: 'Test Content' },
-    });
-
-    // Submit the form
-    fireEvent.click(screen.getByText(/create post/i));
-
-    // Check if error message is shown
+    
+    const submitButton = screen.getByRole('button', { name: /create post/i });
+    fireEvent.click(submitButton);
+    
     await waitFor(() => {
-      expect(screen.getByText(/failed to create post/i)).toBeInTheDocument();
+      expect(screen.getByText(/please enter a title/i)).toBeInTheDocument();
+      expect(screen.getByText(/please enter content/i)).toBeInTheDocument();
     });
   });
 }); 
